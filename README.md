@@ -1,4 +1,8 @@
-# IMDb Q&A Dataset - Data Documentation
+# Movie Knowledge Fine-Tuning Challenge
+
+## Phase 1: Dataset Creation
+
+This documentation covers the first phase of the project - creating the training dataset.
 
 ## What is this?
 
@@ -214,3 +218,32 @@ Each file (train.jsonl, validation.jsonl, test.jsonl) contains one JSON object p
   ]
 }
 ```
+
+The metadata (query type and complexity level) is not included in the output files - it's only used during generation for maintaining the distribution.
+
+## Reproducibility notes
+
+If you regenerate this dataset, the exact questions will differ because:
+
+1. Random sampling of people from the knowledge base
+2. Random year/decade selection for temporal queries
+3. Random pairing of directors for comparison queries
+4. The shuffle before train/val/test split
+
+However, the distribution (30/40/20/10) and general characteristics should remain consistent.
+
+IMDb updates their datasets daily. If you download the source files on different dates, the underlying data will be slightly different (new movies added, data corrections, etc.).
+
+## Usage tips
+
+**For fine-tuning**: Use train.jsonl for training, validation.jsonl for hyperparameter tuning, and test.jsonl for final evaluation. Don't look at test.jsonl during development.
+
+**For evaluation**: The different complexity levels let you measure model performance on different reasoning depths. A model might do well on single-hop queries but struggle with three-hop reasoning.
+
+**For augmentation**: You can easily generate more examples by running the code again with a different random seed or higher total_samples count.
+
+## License and attribution
+
+This dataset is derived from IMDb datasets, which are available for personal and non-commercial use. See IMDb's licensing terms at https://www.imdb.com/interfaces/.
+
+When using this dataset, please acknowledge IMDb as the source of the underlying information.
