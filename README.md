@@ -10,11 +10,11 @@ This dataset contains question-answer pairs about movies, actors, directors, and
 
 The questions range from simple ("How many movies did Tom Hanks act in 1994?") to complex multi-hop queries ("Which movies did Leonardo DiCaprio and Kate Winslet act together in?").
 
-
+## How it was built
 
 ### Data sources
 
-We used five datasets from IMDb's official website (datasets.imdbws.com):
+Five datasets from IMDb's official website (datasets.imdbws.com) were used:
 
 - **title.basics.tsv.gz** - Basic movie information (titles, years, genres)
 - **title.principals.tsv.gz** - Cast and crew for each movie
@@ -24,13 +24,13 @@ We used five datasets from IMDb's official website (datasets.imdbws.com):
 
 ### Filtering decisions
 
-We made several filtering choices to keep the dataset clean and useful:
+Several filtering choices were made to keep the dataset clean and useful:
 
-**Movies only**: We excluded TV shows, episodes, video games, and other non-movie content. Only entries marked as 'movie' in titleType were kept.
+**Movies only**: TV shows, episodes, video games, and other non-movie content were excluded. Only entries marked as 'movie' in titleType were kept.
 
 **Year range**: Movies from 1920-2024. This excludes silent era films (often missing data) and future releases (incomplete information).
 
-**Person credibility**: We only included people with 3-500 film credits. This removes:
+**Person credibility**: Only people with 3-500 film credits were included. This removes:
 - One-off appearances (likely data errors or uncredited roles)
 - Suspiciously prolific entries (usually data quality issues)
 - The sweet spot captures working professionals without noise
@@ -39,7 +39,7 @@ We made several filtering choices to keep the dataset clean and useful:
 
 ### Knowledge base structure
 
-After filtering, we merged everything into a single knowledge base where each row represents one person's involvement in one movie. For example, if Tom Hanks acted in Forrest Gump, that's one row. If Robert Zemeckis directed it, that's another row.
+After filtering, everything was merged into a single knowledge base where each row represents one person's involvement in one movie. For example, if Tom Hanks acted in Forrest Gump, that's one row. If Robert Zemeckis directed it, that's another row.
 
 Columns in the knowledge base:
 - tconst: IMDb movie ID
@@ -52,7 +52,7 @@ Columns in the knowledge base:
 
 ## Question types and complexity
 
-We generated six types of questions with varying complexity levels:
+Six types of questions with varying complexity levels were generated:
 
 ### Single-hop queries (30% of dataset)
 
@@ -145,7 +145,7 @@ These involve counting and sometimes comparing counts across different filters.
 
 ## Statistics
 
-After processing, our knowledge base contains:
+After processing, the knowledge base contains:
 
 - ~500,000-800,000 person-movie records (varies by download date)
 - Actors/actresses: Usually 60-70% of records
@@ -166,27 +166,27 @@ Distribution by complexity:
 
 ## Edge cases and limitations
 
-### Things we handle
+### Things handled
 
-**Multiple movies in one year**: If someone worked on 15 movies in a year, we list up to 10 and add "... and 5 more" at the end.
+**Multiple movies in one year**: If someone worked on 15 movies in a year, up to 10 are listed with "... and 5 more" at the end.
 
 **Missing genres**: Some movies have no genre data. Genre queries skip these.
 
-**Name variations**: We use primaryName from IMDb, which is their canonical form. Stage names and variations are already normalized by IMDb.
+**Name variations**: primaryName from IMDb is used, which is their canonical form. Stage names and variations are already normalized by IMDb.
 
-**Duplicate roles**: If someone is listed as both actor and producer on the same film, they appear in our dataset twice with different category values. This is intentional and accurate.
+**Duplicate roles**: If someone is listed as both actor and producer on the same film, they appear in the dataset twice with different category values. This is intentional and accurate.
 
 ### Things that might be weird
 
-**Actress vs actor**: IMDb separates these as different categories. We preserve this distinction because it's in the source data, even though it's somewhat outdated.
+**Actress vs actor**: IMDb separates these as different categories. This distinction is preserved because it's in the source data, even though it's somewhat outdated.
 
-**Self-collaborations**: You might see "Which movies did Clint Eastwood act in that were directed by Clint Eastwood?" This is valid - he both acted and directed many films.
+**Self-collaborations**: Questions like "Which movies did Clint Eastwood act in that were directed by Clint Eastwood?" are valid - he both acted and directed many films.
 
-**Zero collaborations**: During generation, we try to pick people who actually worked together, but the attempt limit (20x for actor-director, 10x for co-stars) means we might occasionally skip valid pairs if we're unlucky.
+**Zero collaborations**: During generation, the code tries to pick people who actually worked together, but the attempt limit (20x for actor-director, 10x for co-stars) means valid pairs might occasionally be skipped if unlucky.
 
 **Year boundaries**: "Between 1990-1995" is inclusive on both ends, so it includes movies from both 1990 and 1995.
 
-**No TV shows**: Even though some "movies" in IMDb are actually TV movies or direct-to-video releases, if IMDb categorizes them as titleType='movie', we include them.
+**No TV shows**: Even though some "movies" in IMDb are actually TV movies or direct-to-video releases, if IMDb categorizes them as titleType='movie', they're included.
 
 ### Known limitations
 
@@ -194,11 +194,11 @@ Distribution by complexity:
 
 **Foreign films underrepresented**: IMDb is more comprehensive for English-language films. Other languages are present but less complete.
 
-**No rating/quality filtering**: We don't filter by movie ratings or popularity, so you'll get obscure films mixed with blockbusters.
+**No rating/quality filtering**: There's no filtering by movie ratings or popularity, so obscure films are mixed with blockbusters.
 
-**Character names not included**: We don't track which character an actor played, just that they appeared in the film.
+**Character names not included**: Which character an actor played is not tracked, just that they appeared in the film.
 
-**Genre ambiguity**: Genres are comma-separated strings like "Action,Thriller,Drama". We do substring matching, which means searching for "Action" will match any movie with Action in its genre list.
+**Genre ambiguity**: Genres are comma-separated strings like "Action,Thriller,Drama". Substring matching is done, which means searching for "Action" will match any movie with Action in its genre list.
 
 ## Data format
 
@@ -223,7 +223,7 @@ The metadata (query type and complexity level) is not included in the output fil
 
 ## Reproducibility notes
 
-If you regenerate this dataset, the exact questions will differ because:
+If this dataset is regenerated, the exact questions will differ because:
 
 1. Random sampling of people from the knowledge base
 2. Random year/decade selection for temporal queries
@@ -232,7 +232,7 @@ If you regenerate this dataset, the exact questions will differ because:
 
 However, the distribution (30/40/20/10) and general characteristics should remain consistent.
 
-IMDb updates their datasets daily. If you download the source files on different dates, the underlying data will be slightly different (new movies added, data corrections, etc.).
+IMDb updates their datasets daily. If source files are downloaded on different dates, the underlying data will be slightly different (new movies added, data corrections, etc.).
 
 ## Usage tips
 
@@ -240,7 +240,7 @@ IMDb updates their datasets daily. If you download the source files on different
 
 **For evaluation**: The different complexity levels let you measure model performance on different reasoning depths. A model might do well on single-hop queries but struggle with three-hop reasoning.
 
-**For augmentation**: You can easily generate more examples by running the code again with a different random seed or higher total_samples count.
+**For augmentation**: More examples can be generated by running the code again with a different random seed or higher total_samples count.
 
 ## License and attribution
 
