@@ -10,7 +10,7 @@ This dataset contains question-answer pairs about movies, actors, directors, and
 
 The questions range from simple ("How many movies did Tom Hanks act in 1994?") to complex multi-hop queries ("Which movies did Leonardo DiCaprio and Kate Winslet act together in?").
 
-## How we built it
+
 
 ### Data sources
 
